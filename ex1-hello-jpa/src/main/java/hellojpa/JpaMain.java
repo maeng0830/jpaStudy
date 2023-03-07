@@ -32,7 +32,7 @@ public class JpaMain {
 			// 비영속 상태
 			Member member = new Member();
 			member.setId(101L);
-			member.setName("HelloJPA");
+			member.setUsername("HelloJPA");
 
 			// 영속 상태
 			// em 내부의 영속성 컨텍스트에 entity가 저장된다.
@@ -123,7 +123,7 @@ public class JpaMain {
 			// 1차 캐시에 저장된 해당 영속 엔티티의 스냅샷(기존 상태)과 현재 영속 엔티티간의 차이가 있을 경우,
 			// update 쿼리가 쓰기 지연 SQL 저장소에 저장된다.
 			System.out.println("=== findMember.setName(\"modMember\") ===");
-			findMember.setName("modMember");
+			findMember.setUsername("modMember");
 
 			// 그러므로 em.update(findMember)와 같은 별도의 update 쿼리를 생성하는 코드가 필요 없다.
 
