@@ -1,6 +1,5 @@
 package hellojpa;
 
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -55,7 +54,7 @@ public class JpaMain {
 		}
 
 		EntityManager em2 = emf.createEntityManager();
-		EntityTransaction tx2 = em2.getTransaction();
+//		EntityTransaction tx2 = em2.getTransaction();
 		try {
 			// DB에 select 쿼리 전달 O, 영속성 컨텍스트의 1차 캐시에 해당 엔티티가 저장되어있지 않기 때문이다.
 			// DB에서 조회된 데이터는 엔티티화 되어 1차 캐시에 저장된다.
@@ -71,13 +70,13 @@ public class JpaMain {
 			// 1차 캐시를 통해 반복 가능 읽기 등급의 트랜잭션 격리 수준을 DB가 아닌 어플리케이션에서 제공 가능하다.
 			// 마치 자바 컬렉션에서 객체를 조회했던 것 처럼, 1차 캐시에서 조회된 객체는 동일성이 보장된다.
 			System.out.println("=== 영속 엔티티의 동일성 보장 ===");
-			System.out.println(findMember1 == findMember2);
+			System.out.println(findMember1 == findMember2); // true
 
 			System.out.println("=== tx.commit() ===");
-			// DB에 쿼리 전달
-			tx2.commit();
+			// 조회만 하므로 불필요
+			// tx2.commit();
 		} catch (Exception e) {
-			tx2.rollback();
+			// tx2.rollback();
 		} finally {
 			// 리소스 정리
 			em2.close();
