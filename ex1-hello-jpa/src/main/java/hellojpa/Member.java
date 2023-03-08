@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
  * @Entity가 적용된 클래스는 JPA가 관리한다. Entity라고 부른다.
  * Entity는 JPA를 통해 DB 테이블과 매핑될 클래스이다.
  */
-@Entity
+//@Entity
 //@Table(name = "USER") // USER라는 테이블에 매핑된다.
 public class Member {
 
