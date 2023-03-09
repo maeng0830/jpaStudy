@@ -1,4 +1,4 @@
-package associationRelationship.object_oriented.bidirectional;
+package associationRelationship.object_oriented.bidirectional.one_to_many;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
-@Entity
+//@Entity
 public class Team {
 
 	@Id
@@ -19,10 +20,8 @@ public class Team {
 
 	private String name;
 
-	// 양방향 연관관계
-	// 1(Team) : N(Member)
-	// mappedBy = N의 @ManyToOne의 변수명(주인)
-	@OneToMany(mappedBy = "team")
+	@OneToMany // 1이 연관 관계의 주인인 경우
+	@JoinColumn(name = "team_id") // DB에서 조인에 활용되는 컬럼
 	private List<Member> members = new ArrayList<>(); // 관례대로 ArrayList로 초기화 해둔다.
 
 	public Long getId() {

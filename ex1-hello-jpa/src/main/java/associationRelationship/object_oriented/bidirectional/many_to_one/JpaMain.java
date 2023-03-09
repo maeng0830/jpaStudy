@@ -1,4 +1,4 @@
-package associationRelationship.object_oriented.bidirectional;
+package associationRelationship.object_oriented.bidirectional.many_to_one;
 
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package associationRelationship.object_oriented.bidirectional;
+package associationRelationship.object_oriented.bidirectional.many_to_one;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-@Entity
+//@Entity
 public class Member {
 
 	@Id
@@ -23,8 +23,8 @@ public class Member {
 	 * 객체 지향 설계
 	 * 객체 참조 사용
 	 */
-	@ManyToOne // N(member) : 1(team)
-	@JoinColumn(name = "team_id")
+	@ManyToOne // N이 연관관계의 주인인 경우
+	@JoinColumn(name = "team_id") // DB에서 조인에 활용되는 컬럼
 	private Team team;
 
 	public Long getId() {
