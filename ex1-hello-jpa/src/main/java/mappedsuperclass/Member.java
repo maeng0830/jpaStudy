@@ -1,4 +1,4 @@
-package associationRelationship.object_oriented.bidirectional.many_to_one;
+package mappedsuperclass;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-//@Entity
-public class Member {
+@Entity
+public class Member extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
