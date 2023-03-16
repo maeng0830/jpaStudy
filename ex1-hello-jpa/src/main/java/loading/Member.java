@@ -1,14 +1,15 @@
-package mappedsuperclass;
+package loading;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-//@Entity
+@Entity
 public class Member extends BaseEntity {
 
 	@Id
@@ -20,8 +21,8 @@ public class Member extends BaseEntity {
 	private String name;
 
 
-	@ManyToOne // N이 연관관계의 주인인 경우
-	@JoinColumn(name = "team_id") // DB에서 조인에 활용되는 컬럼
+	@ManyToOne(fetch = FetchType.LAZY) // 지연 로딩, Team을 프록시 객체로 조회한다. Member만 DB에서 조회한다.
+	@JoinColumn(name = "team_id")
 	private Team team;
 
 	public Long getId() {

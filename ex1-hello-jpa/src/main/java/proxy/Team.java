@@ -1,4 +1,4 @@
-package mappedsuperclass;
+package proxy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-//@Entity
+@Entity
 public class Team extends BaseEntity {
 
 	@Id

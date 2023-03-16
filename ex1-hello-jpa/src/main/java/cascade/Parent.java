@@ -1,15 +1,17 @@
-package mappedsuperclass;
+package cascade;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-//@Entity
-public class Team extends BaseEntity {
+@Entity
+public class Parent {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,11 +19,13 @@ public class Team extends BaseEntity {
 
 	private String name;
 
-	// 양방향 연관관계
-	// 1(Team) : N(Member)
-	// mappedBy = N의 @ManyToOne의 변수명(주인)
-	@OneToMany(mappedBy = "team")
-	private List<Member> members = new ArrayList<>(); // 관례대로 ArrayList로 초기화 해둔다.
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Child> childList = new ArrayList<>();
+
+	public void addChild(Child child) {
+		childList.add(child);
+		child.setParent(this);
+	}
 
 	public Long getId() {
 		return id;
@@ -39,11 +43,11 @@ public class Team extends BaseEntity {
 		this.name = name;
 	}
 
-	public List<Member> getMembers() {
-		return members;
+	public List<Child> getChildList() {
+		return childList;
 	}
 
-	public void setMembers(List<Member> members) {
-		this.members = members;
+	public void setChildList(List<Child> childList) {
+		this.childList = childList;
 	}
 }

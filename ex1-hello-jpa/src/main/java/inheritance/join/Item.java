@@ -7,9 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // 조인 전략
-@DiscriminatorColumn
+//@Entity
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // 조인 전략
+//@DiscriminatorColumn
 public class Item {
 
 	@Id
