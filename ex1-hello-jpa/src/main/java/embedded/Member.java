@@ -4,7 +4,6 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -18,7 +17,7 @@ public class Member {
 	private String name;
 
 	@Embedded
-	private WorkPeriod workPeriod;
+	private Period workPeriod;
 
 	@Embedded
 	private Address homeAddress;
@@ -47,11 +46,11 @@ public class Member {
 		this.name = name;
 	}
 
-	public WorkPeriod getWorkPeriod() {
+	public Period getWorkPeriod() {
 		return workPeriod;
 	}
 
-	public void setWorkPeriod(WorkPeriod workPeriod) {
+	public void setWorkPeriod(Period workPeriod) {
 		this.workPeriod = workPeriod;
 	}
 

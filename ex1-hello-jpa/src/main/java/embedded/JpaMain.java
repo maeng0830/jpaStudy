@@ -17,7 +17,7 @@ public class JpaMain {
 
 		try {
 			Member member = new Member();
-			member.setWorkPeriod(new WorkPeriod(LocalDateTime.now().minusDays(20L), LocalDateTime.now()));
+			member.setWorkPeriod(new Period(LocalDateTime.now().minusDays(20L), LocalDateTime.now()));
 			member.setHomeAddress(new Address("춘천시", "서부대성로", "12345"));
 
 			em.persist(member);
@@ -39,12 +39,12 @@ public class JpaMain {
 			Address address = new Address("춘천시", "서부대성로", "12345");
 
 			Member member1 = new Member();
-			member1.setWorkPeriod(new WorkPeriod(LocalDateTime.now().minusDays(20L), LocalDateTime.now()));
+			member1.setWorkPeriod(new Period(LocalDateTime.now().minusDays(20L), LocalDateTime.now()));
 			member1.setHomeAddress(address);
 			em2.persist(member1);
 
 			Member member2 = new Member();
-			member2.setWorkPeriod(new WorkPeriod(LocalDateTime.now().minusDays(20L), LocalDateTime.now()));
+			member2.setWorkPeriod(new Period(LocalDateTime.now().minusDays(20L), LocalDateTime.now()));
 			member2.setHomeAddress(address);
 			em2.persist(member2);
 
