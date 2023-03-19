@@ -1,6 +1,9 @@
 package jpql;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -17,9 +20,17 @@ public class Member {
 
 	private int age;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "team_id")
 	private Team team;
+
+	@Enumerated(EnumType.STRING)
+	private MemberType memberType;
+
+	public void changeTeam(Team team) {
+		this.team = team;
+		team.getMembers().add(this);
+	}
 
 	public Long getId() {
 		return id;
@@ -43,5 +54,30 @@ public class Member {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	public MemberType getMemberType() {
+		return memberType;
+	}
+
+	public void setMemberType(MemberType memberType) {
+		this.memberType = memberType;
+	}
+
+	@Override
+	public String toString() {
+		return "Member{" +
+				"id=" + id +
+				", username='" + username + '\'' +
+				", age=" + age +
+				'}';
 	}
 }
