@@ -16,7 +16,6 @@ public class JpaMain {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
-
 		tx.begin();
 
 		// 엔티티 프로젝션
@@ -46,7 +45,6 @@ public class JpaMain {
 
 		EntityManager em2 = emf.createEntityManager();
 		EntityTransaction tx2 = em2.getTransaction();
-
 		tx2.begin();
 
 		// 임베디드 프로젝션
@@ -72,13 +70,10 @@ public class JpaMain {
 
 		EntityManager em3 = emf.createEntityManager();
 		EntityTransaction tx3 = em3.getTransaction();
-
 		tx3.begin();
 
 		// 스칼라 프로젝션
 		try {
-			// 소속된 엔티티로부터 조회
-			
 			// 방법 1
 			List resultList = em3.createQuery("select m.username, m.age from Member m")
 					.getResultList();

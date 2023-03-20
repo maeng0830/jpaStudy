@@ -18,12 +18,6 @@ public class JpaMain {
 
 		tx.begin();
 
-		/**
-		 * fetch join
-		 * JPQL에서 성능 최적화를 위해 제공하는 기능, SQL 조인 종류 X
-		 * 연관된 엔티티 또는 컬렉션을 SQL에서 한번에 함께 조회하는 기능
-		 * n + 1 문제의 해결 방법
-		 */
 		try {
 			Team teamA = new Team();
 			teamA.setName("teamA");
@@ -56,10 +50,6 @@ public class JpaMain {
 
 			// 다대일 페치 조인
 			String query = "select m From Member m join fetch m.team";
-			// EAGER 일반 조인: 회원 목록(프록시 team) select 쿼리 -> 즉시 각 team에 대한 select 쿼리
-			// EAGER 페치 조인: 회원 목록(실제 team) select join 쿼리
-			// LAZY 일반 조인: 회원 목록(프록시 team) select 쿼리 -> 각 team의 데이터에 접근할 때 각각 select 쿼리
-			// LAZY 페치 조인: 회원 목록(실제 team) select join 쿼리
 			System.out.println("====== List<Member> members = em.createQuery(query, Member.class).getResultList(); ======");
 			List<Member> members = em.createQuery(query, Member.class).getResultList();
 
