@@ -2,6 +2,7 @@ package study.datajpa.repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,4 +32,17 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	// Collection을 통한 in절 처리
 	@Query("select m from Member m where m.username in :names")
 	List<Member> findByNames(@Param("names") Collection<String> names);
+
+	// 컬렉션 조회
+	// 없으면 빈 컬렉션 반환
+	List<Member> findListByUsername(String username);
+
+	// 단건 조회
+	// 값이 없을 경우, 순수 JPA에서는 예외 발생, 스프링 데이타 JPA에서는 null
+	// 여러건인 경우, 예외발생
+	Member findMemberByUsername(String username);
+
+	// Optional 단건 조회
+	// 여러건인 경우, 예외 발생
+	Optional<Member> findOptionalByUsername(String username);
 }
