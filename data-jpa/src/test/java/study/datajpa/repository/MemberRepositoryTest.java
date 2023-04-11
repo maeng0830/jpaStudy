@@ -2,6 +2,7 @@ package study.datajpa.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,5 +120,16 @@ class MemberRepositoryTest {
 		assertThat(result.get(0)).isInstanceOf(MemberDto.class);
 
 		System.out.println("result = " + result.get(0));
+	}
+
+	@Test
+	public void findByNames() {
+		Member m1 = new Member("AAA", 10);
+		Member m2 = new Member("BBB", 20);
+		memberRepository.save(m1);
+		memberRepository.save(m2);
+
+		List<Member> result = memberRepository.findByNames(Arrays.asList("AAA", "BBB"));
+		assertThat(result.size()).isEqualTo(2);
 	}
 }
