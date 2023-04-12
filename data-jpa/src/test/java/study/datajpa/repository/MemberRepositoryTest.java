@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +28,8 @@ class MemberRepositoryTest {
 	MemberRepository memberRepository;
 	@Autowired
 	TeamRepository teamRepository;
+	@PersistenceContext
+	EntityManager em;
 
 	@Test
 	public void testMember() {
@@ -198,5 +202,28 @@ class MemberRepositoryTest {
 		assertThat(toMap.getNumber()).isEqualTo(0); // 현재 페이지는 몇번째 페이지인가?
 		assertThat(toMap.isFirst()).isTrue(); // 현재 페이지는 첫번째 페이지인가?
 		assertThat(toMap.hasNext()).isTrue(); // 다음 페이지가 있는가?
+	}
+
+	@Test
+	public void bulkUpdate() {
+		for (int i = 0; i < 10; i++) {
+			memberRepository.save(new Member("member" + i, 10 + i));
+		}
+
+		//when
+		int resultCount = memberRepository.bulkAgePlus(15);
+
+		// 벌크 연산은 영속성 컨텍스트를 거치지 않고 바로 DB에 적용된다. 영속성 컨텍스트에 있는 영속성 엔티티에는 반영이 안된다.
+		Member preMember5 = memberRepository.findMemberByUsername("member5");
+		System.out.println("preMember5.getAge() = " + preMember5.getAge()); // 15
+
+		// 벌크 연산 후에는 영속성 컨텍스트를 정리하고 다시 불러오는 것이 좋다. 특히 벌크 연산 뒤에 추가 로직이 있는 경우..
+		em.flush();
+		em.clear(); // @Modifying의 옵션으로 해결 가능!
+		Member postMember5 = memberRepository.findMemberByUsername("member5");
+		System.out.println("member15.getAge() = " + postMember5.getAge()); // 16
+
+		//given
+		assertThat(resultCount).isEqualTo(5);
 	}
 }
