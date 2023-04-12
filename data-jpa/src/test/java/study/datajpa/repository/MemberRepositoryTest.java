@@ -226,4 +226,97 @@ class MemberRepositoryTest {
 		//given
 		assertThat(resultCount).isEqualTo(5);
 	}
+
+	@Test
+	public void findMemberLazy() {
+		//given
+		//member1 -> teamA
+		//member2 -> teamB
+
+		Team teamA = new Team("teamA");
+		Team teamB = new Team("teamB");
+		teamRepository.save(teamA);
+		teamRepository.save(teamB);
+
+		Member member1 = new Member("member1", 10, teamA);
+		Member member2 = new Member("member2", 10, teamB);
+		memberRepository.save(member1);
+		memberRepository.save(member2);
+
+		em.flush();
+		em.clear();
+
+		//when
+		//select Member 쿼리 실행, 1
+		List<Member> members = memberRepository.findAll();
+
+		for (Member member : members) {
+			System.out.println("member.getUsername() = " + member.getUsername());
+			// 실제 Team 객체를 사용하기 전에는 proxy 객체
+			System.out.println("member.getTeam().getClass() = " + member.getTeam().getClass());
+			// 실제 Team 객체를 사용할 때 각각 Select Team 쿼리 실행, N
+			System.out.println("member.getTeam().getName() = " + member.getTeam().getName());
+		}
+
+		// -> N + 1 문제 발생
+	}
+
+	@Test
+	public void findMemberFetchJoinAndEntityGraph() {
+		//given
+		//member1 -> teamA
+		//member2 -> teamB
+
+		Team teamA = new Team("teamA");
+		Team teamB = new Team("teamB");
+		teamRepository.save(teamA);
+		teamRepository.save(teamB);
+
+		Member member1 = new Member("member1", 10, teamA);
+		Member member2 = new Member("member2", 10, teamB);
+		memberRepository.save(member1);
+		memberRepository.save(member2);
+
+		em.flush();
+		em.clear();
+
+		//when
+		// JPQL을 통해 직접 fetch join 쿼리 작성
+		//select Member, Team 쿼리 실행 1
+		List<Member> memberFetchJoin = memberRepository.findMemberFetchJoin();
+
+		for (Member member : memberFetchJoin) {
+			System.out.println("member.getUsername() = " + member.getUsername());
+			// 실제 Team 객체
+			System.out.println("member.getTeam().getClass() = " + member.getTeam().getClass());
+			System.out.println("member.getTeam().getName() = " + member.getTeam().getName());
+		}
+
+		// -> N + 1 문제 해결
+
+		// JPQL에 fetch join 쿼리를 작성하지 않고, @EntityGraph를 적용하여 fetch join 할 수 있다.
+		//select Member, Team 쿼리 실행 1
+		em.flush();
+		em.clear();
+		List<Member> memberEntityGraph = memberRepository.findMemberEntityGraph();
+
+		for (Member member : memberEntityGraph) {
+			System.out.println("member.getUsername() = " + member.getUsername());
+			// 실제 Team 객체
+			System.out.println("member.getTeam().getClass() = " + member.getTeam().getClass());
+			System.out.println("member.getTeam().getName() = " + member.getTeam().getName());
+		}
+
+		// -> N + 1 문제 해결
+
+		//메소드명 쿼리 메소드에도 @EntityGraph 적용 가능
+		em.flush();
+		em.clear();
+		memberRepository.findEntityGraphByUsername("member1");
+
+		//공통 인터페이스에 정의된 메소드도 오버라이딩하여 @EntityGraph 적용 가능
+		em.flush();
+		em.clear();
+		memberRepository.findAll();
+	}
 }
