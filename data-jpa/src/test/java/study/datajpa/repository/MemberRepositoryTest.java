@@ -8,6 +8,11 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
@@ -144,5 +149,54 @@ class MemberRepositoryTest {
 		List<Member> list = memberRepository.findListByUsername("AAA");
 		Member member = memberRepository.findMemberByUsername("AAA");
 		Optional<Member> optionalMember = memberRepository.findOptionalByUsername("AAA");
+	}
+
+	@Test
+	public void pagingPage() {
+		// given
+		for (int i = 0; i < 5; i++) {
+			memberRepository.save(new Member("member" + i, 10));
+		}
+
+		int age = 10;
+		PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Direction.DESC, "username"));
+
+		// when
+		Page<Member> page = memberRepository.findPageByAge(age, pageRequest);
+
+		Page<MemberDto> toMap = page.map(
+				m -> new MemberDto(m.getId(), m.getUsername(), null));
+
+		//then
+		assertThat(toMap.getContent().size()).isEqualTo(3); // 현재 페이지의 데이터는 몇개인가?
+		assertThat(toMap.getTotalElements()).isEqualTo(5); // 총 페이지의 데이터는 몇개인가?
+		assertThat(toMap.getNumber()).isEqualTo(0); // 현재 페이지는 몇번째 페이지인가?
+		assertThat(toMap.getTotalPages()).isEqualTo(2); // 총 페이지는 몇개인가?
+		assertThat(toMap.isFirst()).isTrue(); // 현재 페이지는 첫번째 페이지인가?
+		assertThat(toMap.hasNext()).isTrue(); // 다음 페이지가 있는가?
+	}
+
+	@Test
+	public void pagingSlice() {
+		// given
+		for (int i = 0; i < 5; i++) {
+			memberRepository.save(new Member("member" + i, 10));
+		}
+
+		int age = 10;
+		// Slice를 사용할 경우, size + 1만큼 요청한다. count 쿼리도 나가지 않는다(필요가 없다).
+		PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Direction.DESC, "username"));
+
+		// when
+		Slice<Member> slice = memberRepository.findSliceByAge(age, pageRequest);
+
+		Slice<MemberDto> toMap = slice.map(
+				m -> new MemberDto(m.getId(), m.getUsername(), null));
+
+		//then
+		assertThat(toMap.getContent().size()).isEqualTo(3); // 현재 페이지의 데이터는 몇개인가?
+		assertThat(toMap.getNumber()).isEqualTo(0); // 현재 페이지는 몇번째 페이지인가?
+		assertThat(toMap.isFirst()).isTrue(); // 현재 페이지는 첫번째 페이지인가?
+		assertThat(toMap.hasNext()).isTrue(); // 다음 페이지가 있는가?
 	}
 }

@@ -3,6 +3,9 @@ package study.datajpa.repository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -45,4 +48,15 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	// Optional 단건 조회
 	// 여러건인 경우, 예외 발생
 	Optional<Member> findOptionalByUsername(String username);
+
+	Page<Member> findPageByAge(int age, Pageable pageable);
+
+	Slice<Member> findSliceByAge(int age, Pageable pageable);
+
+	// join이 필요한 paging 시, count 쿼리 분리(분리하지 않을 경우, count 쿼리에 대해서도 불필요한 조인이 실행된다)
+	// paing, sorting과 관련된 쿼리는 작성할 필요가 없다. Pageable 파라미터를 통해 해결된다.
+	// sorting 로직이 복잡해질 경우, Pageable에서 Sorting 값을 제거한 뒤 직접 쿼리에 작성해주면 된다.
+	@Query(value = "select m from Member m left join m.team t",
+			countQuery = "select count(m.username) from Member m")
+	Page<Member> findPageCountByAge(int age, Pageable pageable);
 }
