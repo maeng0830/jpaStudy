@@ -3,6 +3,7 @@ package study.datajpa.repository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.QueryHint;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
@@ -79,4 +81,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	@EntityGraph(attributePaths = {"team"})
 	List<Member> findEntityGraphByUsername(String username);
+
+	// @QueryHint를 통해 조회된 데이터를 변경하지 않고, 오로지 조회만 할 것이라고 명시해준다.
+	// 이러면 변경감지를 위한 추가 로직이 제외되기 때문에, 프로그램적 비용이 절감될 수 있다.
+	@QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
+	Member findReadOnlyByUsername(String username);
 }

@@ -319,4 +319,19 @@ class MemberRepositoryTest {
 		em.clear();
 		memberRepository.findAll();
 	}
+
+	@Test
+	public void queryHint() {
+		//given
+		Member member1 = memberRepository.save(new Member("member1", 10));
+		em.flush();
+		em.clear();
+
+		//when
+		Member findMember = memberRepository.findReadOnlyByUsername(member1.getUsername());
+		findMember.setUsername("member2");
+
+		// 변경감지가 안되기 때문에 쿼리가 나가지 않는다.
+		em.flush();
+	}
 }
