@@ -155,6 +155,8 @@ class MemberRepositoryTest {
 		Optional<Member> optionalMember = memberRepository.findOptionalByUsername("AAA");
 	}
 
+	/// paging
+
 	@Test
 	public void pagingPage() {
 		// given
@@ -226,6 +228,8 @@ class MemberRepositoryTest {
 		//given
 		assertThat(resultCount).isEqualTo(5);
 	}
+
+	///// fetch join
 
 	@Test
 	public void findMemberLazy() {
@@ -333,5 +337,10 @@ class MemberRepositoryTest {
 
 		// 변경감지가 안되기 때문에 쿼리가 나가지 않는다.
 		em.flush();
+	}
+
+	@Test
+	public void callCustom() {
+		List<Member> result = memberRepository.findMemberCustom();
 	}
 }

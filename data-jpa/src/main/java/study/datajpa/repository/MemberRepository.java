@@ -16,7 +16,7 @@ import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
 	List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
@@ -64,7 +64,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 			countQuery = "select count(m.username) from Member m")
 	Page<Member> findPageCountByAge(int age, Pageable pageable);
 
-	@Modifying(clearAutomatically = true) // jpa의 executeUpdate() 실행, 벌크 연산 후 영속성 컨텍스트 clear()
+	@Modifying // jpa의 executeUpdate() 실행
+//	@Modifying(clearAutomatically = true) // jpa의 executeUpdate() 실행 + 벌크 연산 후 영속성 컨텍스트 clear()
 	@Query("update Member m set m.age = m.age + 1 where m.age >= :age")
 	int bulkAgePlus(@Param("age") int age);
 
