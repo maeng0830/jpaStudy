@@ -17,7 +17,7 @@ import lombok.ToString;
 @Getter @Setter // 엔티티에 Setter는 가급적 사용하지 말자, 생성자 또는 빌드패턴을 사용하자
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "username", "age"}) // 연관 필드(team)을 ToString하면 무한루프 발생.
-public class Member {
+public class Member extends BaseEntity {
 
 	@Id @GeneratedValue
 	@Column(name = "member_id")
