@@ -13,6 +13,12 @@ spring:
 # show_sql: true <- sql을 콘솔에 남기지 않는다.
         format_sql: true
 
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 2000
+
 logging.level:
   org.hibernate.SQL: debug # sql을 로그로 남긴다.
 #  org.hibernate.type: trace # sql에 바인딩된 파라미터를 함께 보여준다. 그러나 불편해서 안쓴다. p6spy를 쓰자.
