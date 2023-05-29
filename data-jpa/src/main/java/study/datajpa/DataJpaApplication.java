@@ -17,7 +17,6 @@ public class DataJpaApplication {
 		SpringApplication.run(DataJpaApplication.class, args);
 	}
 
-
 	// @CreatedBy, LastModifiedBy의 값
 	@Bean
 	public AuditorAware<String> auditorProvider() {

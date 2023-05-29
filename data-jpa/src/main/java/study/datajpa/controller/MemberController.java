@@ -31,7 +31,7 @@ public class MemberController {
 		return member.getUsername();
 	}
 
-	// 쿼리파라미터로 page, size를 사용하면 자동으로 Pageable의 구현체를 생성하여 바인딩해준다.
+	// 쿼리파라미터로 page, size를 사용하면 자동으로 Pageable의 구현체에 바인딩해준다.
 	// page=0, size=20이 기본값이다.
 	@GetMapping("/members")
 	public Page<MemberDto> list(Pageable pageable) {
