@@ -12,6 +12,7 @@ import jpabook.jpashop.repository.OrderSearch;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -76,6 +77,28 @@ public class OrderApiController {
 		// Yes distinct
 			// order ref =jpabook.jpashop.domain.Order@62c89ff0 id=4
 			// order ref =jpabook.jpashop.domain.Order@1fb18d53 id=11
+
+		List<OrderDto> result = orders.stream()
+				.map(OrderDto::new)
+				.collect(Collectors.toList());
+
+		return result;
+
+		// but 컬렉션 페치조인 시 페이징이 불가능하다는 단점이 존재한다.
+	}
+
+	@GetMapping("/api/v3.1/orders")
+	public List<OrderDto> ordersV3_page(@RequestParam(value = "offset", defaultValue = "0") int offset,
+										@RequestParam(value = "limit", defaultValue = "100") int limit) {
+		// fetch join for xToOne + No distinct + hibernate.default_batch_fetch_size
+		List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit);
+
+		for (Order order : orders) {
+			System.out.println("order ref =" + order + " id=" + order.getId());
+		}
+		// No distinct
+			// order ref =jpabook.jpashop.domain.Order@467c66ca id=4
+			//order ref =jpabook.jpashop.domain.Order@1a8678b6 id=11
 
 		List<OrderDto> result = orders.stream()
 				.map(OrderDto::new)

@@ -12,7 +12,10 @@ spring:
       hibernate:
 #        show_sql: true
         format_sql: true
-
+        default_batch_fetch_size: 100
+        # 지정한 숫자 만큼 기준 엔티티 ID를 in query에 적용하여, 지연 로딩될 엔티티를 한번에 로딩한다.
+        # 그리고 지연 로딩될 엔티티에 대해서 지연 로딩될 엔티티도 한번에 로딩된다.
+        # 이미 영속성 컨텍스트에 존재하는 엔티티(ex: 페치 조인을 통해 이미 조회된 엔티티)에 대해서는 영향을 주지 않는다.
 logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace

@@ -84,10 +84,23 @@ public class OrderRepository {
 	// distinct는 'DB의 distinct' + '데이터 조회 결과 컬렉션 내부에서 같은 식별자를 가진 엔티티 객체를 중복으로 판별해 제거' 기능을 제공한다.
 	public List<Order> findAllWithItem() {
 		return em.createQuery("select distinct o from Order o"
-				+ " join fetch o.member m"
-				+ " join fetch o.delivery d"
-				+ " join fetch o.orderItems oi"
-				+ " join fetch oi.item i", Order.class)
+						+ " join fetch o.member m"
+						+ " join fetch o.delivery d"
+						+ " join fetch o.orderItems oi"
+						+ " join fetch oi.item i", Order.class)
+				.getResultList();
+	}
+
+	// 컬렉션 fetch join의 페이징 불가능 문제 해결
+	// 우선 xToOne(member, delivery)에 대해서는 페치 조인을 사용해도 문제가 없다.
+	// xToMany에 대해서는 default_batch_fetch_size를 사용하자.
+	public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+		return em.createQuery(
+						"select o from Order o" +
+								" join fetch o.member m" +
+								" join fetch o.delivery d", Order.class)
+				.setFirstResult(offset)
+				.setMaxResults(limit)
 				.getResultList();
 	}
 }
