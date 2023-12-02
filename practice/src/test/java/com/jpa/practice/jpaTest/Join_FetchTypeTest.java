@@ -1,4 +1,4 @@
-package com.jpa.practice.joinFetchTest;
+package com.jpa.practice.jpaTest;
 
 import com.jpa.practice.member.domain.Member;
 import com.jpa.practice.member.repository.MemberRepository;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
-public class JoinFetchTest {
+public class Join_FetchTypeTest {
 
 	@Autowired
 	private MemberRepository memberRepository;

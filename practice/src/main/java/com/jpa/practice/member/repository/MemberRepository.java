@@ -37,4 +37,10 @@ public class MemberRepository {
 				+ " join m.teamForLazy t", Member.class)
 				.getResultList();
 	}
+
+	public List<Member> membersWithFetchJoin() {
+		return em.createQuery("select m from Member m"
+				+ " join fetch m.teamForLazy", Member.class)
+				.getResultList();
+	}
 }
